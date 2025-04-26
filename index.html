@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>大喜利デモ</title>
+  <script type="module">
+    import init, { RubyVM } from "https://cdn.jsdelivr.net/npm/@ruby/wasm-wasi@latest/+esm";
+
+    async function main() {
+      const { vm } = await init();
+      globalThis.rubyVM = vm;
+
+      const main_rb = await (await fetch('./main.rb')).text();
+      vm.eval(main_rb);
+    }
+
+    main();
+  </script>
+</head>
+<body>
+  <h1>お題</h1>
+  <img src="https://placekitten.com/300/200" alt="お題画像"><br><br>
+
+  <input id="comment" type="text" placeholder="コメントを書く">
+  <button onclick="rubyVM.eval('submit_comment')">送信</button>
+
+  <h2>コメント一覧</h2>
+  <ul id="comments"></ul>
+</body>
+</html>
